@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Quelle heure est-il ?</title>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<style>
+/* fond de page */
+body {
+  background-image: radial-gradient(farthest-side circle at center bottom, orangered, black);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  color: white;
+  height: 100vh;
+  margin: 0;
+  /* pour éviter l'ascenseur */
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
+
+/* bandeau de titre */
+h2 { 
+  color: white;
+  border: none;
+  box-shadow: none;
+  background-color: rgba(255,255,255,0.3);
+  border-top: 3px solid rgba(255,255,255,0.6);
+  border-bottom: 3px solid rgba(255,255,255,0.6);
+  margin-top: 1.33em;
+  text-shadow: 3px 3px 3px black;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1.33em;
+}
+
+/* contenu de la page */
+body > * { padding-left: 20px; }
+
+/* polices de caractères */
+body { font-family: Roboto, sans-serif; }
+h2 span { font-family: "Roboto Mono"; }
+
+label { display: inline-block; width: 8em; margin-bottom: 0.33em}
+input { width: 14em; }
+</style>
+
+<h2>Quelle heure est-il dans le monde ?</h2>
+<div>
+ <label for="timezone">Fuseau Horaire : </label>
+ <select name="timezone" id="timezone">
+  <option value="Europe/Paris">UTC +2 -- Paris
+  <option value="Europe/London">UTC +1 -- Londres
+  <option value="Atlantic/Reykjavik">UTC +0 -- Reykjavik
+  <option value="Atlantic/Cape_Verde">UTC -1 -- Cap Vert
+  <option value="Atlantic/South_Georgia">UTC -2 -- &Icirc;les Sandwich
+  <option value="America/Sao_Paulo">UTC -3 -- Rio de Janeiro
+  <option value="America/New_York">UTC -4 -- New-York
+  <option value="America/Chicago">UTC -5 -- Chicago
+  <option value="America/Denver">UTC -6 -- Denver
+  <option value="America/Los_Angeles">UTC -7 -- San Francisco
+  <option value="America/Anchorage">UTC -8 -- Anchorage
+  <option value="America/Adak">UTC -9 -- &Icirc;les Aléoutiennes
+  <option value="US/Hawaii">UTC -10 -- Honolulu
+  <option value="Pacific/Auckland">UTC -11 -- Auckland
+  <option value="Asia/Kamchatka">UTC -12 -- Kamchatka
+  <option value="Pacific/Noumea">UTC +11 -- Nouméa
+  <option value="Australia/Brisbane">UTC +10 -- Brisbane
+  <option value="Asia/Tokyo">UTC +9 -- Tokyo
+  <option value="Hongkong">UTC +8 -- Hong Kong
+  <option value="Asia/Jakarta">UTC +7 -- Jakarta
+  <option value="Asia/Novosibirsk">UTC +6 -- Novosibirsk
+  <option value="Asia/Tashkent">UTC +5 -- Tashkent
+  <option value="Asia/Dubai">UTC +4 -- Dubai
+  <option value="Asia/Baghdad">UTC +3 -- Baghdad
+ </select>
+ <button id="bouton">Envoyer</button>
+</div>
+<p id="reponse"></p>
+<script>
+document.getElementById('bouton').addEventListener('click', function() {
+  var tz = document.getElementById('timezone').value
+    , dropzone = document.getElementById('reponse')
+    , r = new XMLHttpRequest()
+  ;
+  r.onload = function() {
+    var data = JSON.parse(this.responseText)
+      , time = data.tztime
+    ;
+    dropzone.innerHTML = time;
+  };
+  r.open('GET','/time/'+tz,true);
+  r.send();
+});
+</script>

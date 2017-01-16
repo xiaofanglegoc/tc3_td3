@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<title>Q2-1.html</title>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<meta charset='utf-8'>
+<style>
+
+/* fond de page */
+body {
+  background-image: linear-gradient(0deg, slateblue, black, black);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  color: white;
+  height: 100vh;
+  margin: 0;
+  /* pour éviter l'ascenseur */
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
+
+/* bandeau de titre */
+h1 { 
+  color: white;
+  border: none;
+  box-shadow: none;
+  background-color: rgba(255,255,255,0.3);
+  border-top: 3px solid rgba(255,255,255,0.6);
+  border-bottom: 3px solid rgba(255,255,255,0.6);
+  margin-top: 1.33em;
+  text-shadow: 3px 3px 3px black;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1.33em;
+}
+
+/* contenu de la page */
+body > * { padding-left: 10px; }
+
+/* polices de caractères */
+body { font-family: Roboto, sans-serif; }
+
+/* positionnement des champs */
+label { display: block; }
+label span { display: inline-block; width: 5em; height: 1.5em; }
+
+</style>
+
+<h1>Mon premier formulaire</h1>
+
+<form action="/toctoc" method="POST">
+<label><span>Prénom :</span><input name="Prenom"></label>
+<label><span>Nom :</span><input name="Nom"></label>
+<label><span> </span><input type="submit"></label>
+</form>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Ponctualité Transiliens</title>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<style>
+/* fond de page */
+body {
+  background-image: linear-gradient(0deg, silver, #040, black);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  color: white;
+  height: 100vh;
+  margin: 0;
+}
+
+/* bandeau de titre */
+h2 { 
+  color: white;
+  border: none;
+  box-shadow: none;
+  background-color: rgba(255,255,255,0.3);
+  border-top: 3px solid rgba(255,255,255,0.6);
+  border-bottom: 3px solid rgba(255,255,255,0.6);
+  margin-top: 1.33em;
+  text-shadow: 3px 3px 3px black;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1.33em;
+}
+#reponse {
+  padding-top: 30px;
+}
+img {
+  position: absolute;
+  width: 90%;
+  left: 5%;
+  border-radius: 7px;
+  box-shadow: 5px 5px 5px black;
+}
+
+/* contenu de la page */
+body > * { padding-left: 20px; }
+
+/* polices de caractères */
+body { font-family: Roboto, sans-serif; }
+h2 span { font-family: "Roboto Mono"; }
+
+label { display: inline-block; width: 4em; margin-bottom: 0.33em}
+input { width: 14em; }
+</style>
+
+<h2>Ponctualité des transiliens</h2>
+<div>
+ <label for="ligne">Ligne : </label>
+ <select name="ligne" id="ligne">
+  <!--option value="RER/A">RER A</option>
+  <option value="RER/B">RER B</option>
+  <option value="RER/C">RER C</option>
+  <option value="RER/D">RER D</option>
+  <option value="RER/E">RER E</option>
+  <option value="Transilien/H">Paris Nord Ouest</option>
+  <option value="Transilien/J">Paris Saint-Lazare Nord</option>
+  <option value="Transilien/K">Paris Nord Crépy</option>
+  <option value="Transilien/L">Paris Saint-Lazare Sud</option>
+  <option value="Transilien/N">Paris Montparnasse</option>
+  <option value="Transilien/P">Paris Est</option>
+  <option value="Transilien/R">Paris Sud Est</option>
+  <option value="Transilien/U">La Verrière - La Défense</option-->
+ </select>
+ <button id="Recuperer">Récupérer le diagramme</button>
+ <button id="Supprimer">Supprimer le diagramme</button>
+</div>
+<p id="reponse" style="display: none">
+ <img src="" alt="">
+</p>
+<script>
+var ligneselect = document.getElementById('ligne')
+  , reponse =  document.getElementById('reponse')
+  , image =  document.querySelector('#reponse img')
+  , recuperer =  document.getElementById('Recuperer')
+  , supprimer =  document.getElementById('Supprimer')
+  , r = new XMLHttpRequest()
+;
+
+// déclaration du gestionnaire d'événement pour les boutons
+recuperer.addEventListener('click',traitement);
+supprimer.addEventListener('click',traitement);
+
+// récupération de la liste des lignes
+r.onload = function() {
+  var data = JSON.parse(this.responseText)
+    , n, o
+  ;
+  for ( n = 0; n < data.length; n++ ) {
+    o = document.createElement('option');
+    o.value = data[n].type+'/'+data[n].code;
+    o.textContent = data[n].nom;
+    ligneselect.appendChild(o);
+  }
+}
+r.open('GET','/lignes',true);
+r.send();
+
+// traitement du clic sur l'un des boutons
+function traitement(event) {
+  var button = event.target
+    , ligne = ligneselect.value
+    , r = new XMLHttpRequest()
+    , method
+  ;
+  // récupération
+  if ( button.id == 'Recuperer' ) {
+    r.onload = function() {
+      var data = JSON.parse(this.responseText);
+      image.src = data.img;
+      image.alt = data.title;
+      image.title = data.title;
+      reponse.style.display = 'block';
+    };
+    method = 'POST';
+  }
+  // suppression
+  else { // button.id == 'Supprimer'
+console.log('hello from DELETE');
+    r.onload = function() {
+      reponse.style.display = 'none';
+    };
+    method = 'DELETE';
+  }
+  r.open(method,'/ponctualite/'+ligne,true);
+  r.send();
+}
+</script>
